@@ -70,20 +70,6 @@
     pointer-events:none;
   }
 
-  /* focused caption */
-  .caption{
-    position:fixed;left:50%;top:50%;
-    transform:translate(-50%,-50%);
-    z-index:3;pointer-events:none;
-    display:flex;flex-direction:column;align-items:center;gap:10px;
-    color:#fff;text-align:center;
-    opacity:0;transition:opacity .5s ease;
-    mix-blend-mode:difference;
-  }
-  .caption.show{opacity:1;transition-delay:.55s}
-  .caption svg{width:clamp(34px,4vw,52px);height:auto}
-  .caption .cap-t{font-size:clamp(11px,1vw,13px);letter-spacing:.14em;text-transform:uppercase}
-
   /* ---------- overlay UI ---------- */
   .ui{position:fixed;inset:0;z-index:2;pointer-events:none}
   .ui a,.ui button{pointer-events:auto}
@@ -220,14 +206,6 @@
   <div class="world" id="world"></div>
 </div>
 
-<div class="caption" id="caption" aria-live="polite">
-  <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">
-    <circle cx="24" cy="24" r="6.5"/>
-    <ellipse cx="24" cy="24" rx="20" ry="7.5" transform="rotate(-28 24 24)"/>
-  </svg>
-  <span class="cap-t" id="capText"></span>
-</div>
-
 <div class="ui" id="ui">
   <div class="brand fade">
     <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><circle cx="24" cy="24" r="6.5"/><ellipse cx="24" cy="24" rx="20" ry="7.5" transform="rotate(-28 24 24)"/></svg>
@@ -291,8 +269,6 @@
   const stage = document.getElementById("stage");
   const world = document.getElementById("world");
   const ui = document.getElementById("ui");
-  const caption = document.getElementById("caption");
-  const capText = document.getElementById("capText");
   const counter = document.getElementById("counter");
   const root = document.documentElement;
 
@@ -397,14 +373,12 @@
       ryT = nearest(ry, -c.lon);
       rxT = -c.lat;
       zoomT = focusZoom();
-      capText.textContent = c.img.name;
       counter.textContent = String(IMAGES.indexOf(c.img) + 1).padStart(2, "0") + " / 12";
     } else {
       rxT = -10;
       zoomT = idleZoom();
       counter.textContent = "00 / 12";
     }
-    caption.classList.toggle("show", !!c);
     document.body.classList.toggle("focused", !!c);
     ui.classList.toggle("focused-ui", !!c);
   }
